@@ -16,10 +16,10 @@ void calHeight(double &gHeight,double &rHeight,int style)
 		gHeight = (rand()%50 + 280)/100.0;
 		rHeight = (rand()%250 + 450)/100.0;
 	}
-	else                        // aulic   ground:3.2-5.0  roof:6.0-15.0
+	else                        // aulic   ground:3.2-4.0  roof:6.0-9.0
 	{	
-		gHeight = (rand()%180 + 320)/100.0;
-		rHeight = (rand()%900 + 600)/100.0;
+		gHeight = (rand()%80 + 320)/100.0;
+		rHeight = (rand()%300 + 600)/100.0;
 	}	
 }
 

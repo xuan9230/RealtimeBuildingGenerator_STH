@@ -43,10 +43,8 @@ private:
 	void rectangleFrontSubdivide(int face);
 	void rectangleBackSubdivide(int face);
 	void unitSideSubdivide(int face);
-	void unitFrontSubdivide(int face);
+	void unitFrontSubdivide(int face,bool setDoor);
 	void unitTBSubdivide(int face);
-
-	void setDoor(int doorSeq);
 	void setWallCorner(int WCSeq,int unitNum);
 
 public:

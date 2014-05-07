@@ -17,6 +17,7 @@ int REntity::Render()
 
 		// 1 for cuboid,uniform ground
 	case 1:
+	{
 		int subUnitSize;
 		
 		cubeRenderGround();
@@ -34,22 +35,32 @@ int REntity::Render()
 		subUnitSize = FaceDivided.size();
 		
 		rectangleFrontSubdivide(2);			// front
+
+		int count = Face.end()-Face.begin()-indexF[2];
+		count /= 2;
 		for(vector<cubeFace>::iterator i=Face.begin()+indexF[2];i!=Face.end();i++)
-			unitFrontSubdivide(i-Face.begin());
+		{
+			
+			if((i-Face.begin()-indexF[2])==count)
+				unitFrontSubdivide(i-Face.begin(),true);
+			else
+				unitFrontSubdivide(i-Face.begin(),false);
+		}
+
 		setWallCorner(subUnitSize,FaceDivided.size());
 		subUnitSize = FaceDivided.size();
 		
 		rectangleBackSubdivide(2);         // back
-		setDoor(((indexF[2]+indexF[3])/2-indexF[0])*9);       
 		subUnitSize--;
 		for(vector<cubeFace>::iterator i=Face.begin()+indexF[3];i!=Face.end();i++)
-			unitFrontSubdivide(i-Face.begin());
+			unitFrontSubdivide(i-Face.begin(),false);
 		setWallCorner(subUnitSize,FaceDivided.size());
 
 		unitTBSubdivide(0);                 // top
 		unitTBSubdivide(1);                 // bottom
-
+	}
 		break;
+
 
 		// 5 for cuboid body
 	case 5:
@@ -62,10 +73,11 @@ int REntity::Render()
 			unitSideSubdivide(i-Face.begin());
 		rectangleFrontSubdivide(2);			// front
 		for(vector<cubeFace>::iterator i=Face.begin()+indexF[2];i!=Face.end();i++)
-			unitFrontSubdivide(i-Face.begin());
+			unitFrontSubdivide(i-Face.begin(),false);
+
 		rectangleBackSubdivide(2);			// back
 		for(vector<cubeFace>::iterator i=Face.begin()+indexF[3];i!=Face.end();i++)
-			unitFrontSubdivide(i-Face.begin());
+			unitFrontSubdivide(i-Face.begin(),false);
 		unitTBSubdivide(0);                 // top
 		unitTBSubdivide(1);                 // bottom
 		break;   
@@ -281,7 +293,8 @@ void REntity::GenObj(unsigned int snumber,int plusNum)
 			outObj<<"v "<<(*i).x<<' '<<(*i).y<<' '<<(*i).z<<'\n';
 			// write faces into file
 		for(vector<cubeFace>::iterator i =FaceDivided.begin();i<FaceDivided.end();i++)
-			outObj<<"f "<<(*i).v1<<' '<<(*i).v2<<' '<<(*i).v3<<' '<<(*i).v4<<'\n';
+			if((*i).getAttri()!=8)
+				outObj<<"f "<<(*i).v1<<' '<<(*i).v2<<' '<<(*i).v3<<' '<<(*i).v4<<'\n';
 	}
 
 	else if(_entity_type == 5)            // for cuboid body
@@ -341,7 +354,7 @@ void REntity::rectangleLeftSideSubdivide(int face)
 	
 	// subdivide based on _d
 	
-	if(_d==0) _d = 0.0155*_style+2.54;
+	if(_d==0) _d = 0.0155*_style+2.86;
 
 	double rDepth = Vertex[f.v4-1].z - Vertex[f.v1-1].z;	
 
@@ -409,7 +422,7 @@ void REntity::rectangleRightSideSubdivide(int face)
 	
 	// subdivide based on _d
 	
-	if(_d==0) _d = 0.0155*_style+2.54;
+	if(_d==0) _d = 0.0155*_style+2.86;
 
 	double rDepth = Vertex[f.v4-1].z - Vertex[f.v1-1].z;	
 
@@ -460,7 +473,7 @@ void REntity::rectangleRightSideSubdivide(int face)
 void REntity::rectangleFrontSubdivide(int face)
 {
 	cubeFace f = Face[face];
-	int vstart = Vertex.size()+1;            // where verteices subdivided start
+	int vstart = Vertex.size()+1;            // where vertices subdivided start
 	
 	if(indexF.size()!=0)                    // start position of former indices decrease
 		for(vector<int>::iterator i=indexF.begin();i!=indexF.end();i++)
@@ -477,7 +490,7 @@ void REntity::rectangleFrontSubdivide(int face)
 	
 	// subdivide based on _d
 	
-	if(_d==0) _d = 0.0155*_style+2.54;
+	if(_d==0) _d = 0.0155*_style+2.86;
 
 	double rDepth = Vertex[f.v4-1].x - Vertex[f.v1-1].x;	
 
@@ -545,7 +558,7 @@ void REntity::rectangleBackSubdivide(int face)
 	
 	// subdivide based on _d
 	
-	if(_d==0) _d = 0.0155*_style+2.54;
+	if(_d==0) _d = 0.0155*_style+2.86;
 
 	double rDepth = Vertex[f.v1-1].x - Vertex[f.v4-1].x;	
 
@@ -595,7 +608,7 @@ void REntity::rectangleBackSubdivide(int face)
 
 // unit subdivide: render window and window ornament faces
 
-void REntity::unitFrontSubdivide(int face)
+void REntity::unitFrontSubdivide(int face, bool setDoor)
 {
 	cubeFace ftemp = Face[face];
 	int startPos = Vertex.size()+1;
@@ -675,13 +688,19 @@ void REntity::unitFrontSubdivide(int face)
 	newf.v2 = startPos+4;
 	newf.v3 = startPos+8;
 	newf.v4 = startPos+7;
-	newf.iniAttri(6);
+	if(setDoor==false)
+		newf.iniAttri(6);
+	else
+		newf.iniAttri(8);
 	FaceDivided.push_back(newf);
 	newf.v1 = startPos+4;
 	newf.v2 = startPos+5;
 	newf.v3 = startPos+9;
 	newf.v4 = startPos+8;
-	newf.iniAttri(0);
+	if(setDoor==false)
+		newf.iniAttri(0);
+	else
+		newf.iniAttri(8);
 	FaceDivided.push_back(newf);
 
 	newf.v1 = startPos+6;
@@ -822,24 +841,6 @@ void REntity::unitTBSubdivide(int face)
 	FaceDivided.push_back(ftb);
 }
 
-// setDoor: assemble two faces into a new face - door
-
-void REntity::setDoor(int doorSeq)
-{
-	cubeFace door;
-	door.iniAttri(8);
-
-	door.v1 = FaceDivided[doorSeq+4].v1;
-	door.v2 = FaceDivided[doorSeq+5].v2;
-	door.v3 = FaceDivided[doorSeq+5].v3;
-	door.v4 = FaceDivided[doorSeq+4].v4;
-
-	FaceDivided.erase(FaceDivided.begin()+doorSeq+4,FaceDivided.begin()+doorSeq+6);
-	FaceDivided.insert(FaceDivided.begin()+doorSeq+4,1,door);
-
-	FaceDivided[doorSeq+4].setAttri();
-	
-}
 
 // set wall corner: assign attributes to wall corner
 
