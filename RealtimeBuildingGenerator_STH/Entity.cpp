@@ -51,10 +51,11 @@ int REntity::Render()
 		subUnitSize = FaceDivided.size();
 		
 		rectangleBackSubdivide(2);         // back
-		subUnitSize--;
 		for(vector<cubeFace>::iterator i=Face.begin()+indexF[3];i!=Face.end();i++)
 			unitFrontSubdivide(i-Face.begin(),false);
 		setWallCorner(subUnitSize,FaceDivided.size());
+
+		setBand(FaceDivided.size());
 
 		unitTBSubdivide(0);                 // top
 		unitTBSubdivide(1);                 // bottom
@@ -293,7 +294,7 @@ void REntity::GenObj(unsigned int snumber,int plusNum)
 			outObj<<"v "<<(*i).x<<' '<<(*i).y<<' '<<(*i).z<<'\n';
 			// write faces into file
 		for(vector<cubeFace>::iterator i =FaceDivided.begin();i<FaceDivided.end();i++)
-			if((*i).getAttri()!=8)
+			if((*i).getAttri()!=6 && (*i).getAttri()!=8)
 				outObj<<"f "<<(*i).v1<<' '<<(*i).v2<<' '<<(*i).v3<<' '<<(*i).v4<<'\n';
 	}
 
@@ -305,7 +306,8 @@ void REntity::GenObj(unsigned int snumber,int plusNum)
 			outObj<<"v "<<(*i).x<<' '<<(*i).y<<' '<<(*i).z<<'\n';
 			// write faces into file
 		for(vector<cubeFace>::iterator i =FaceDivided.begin();i<FaceDivided.end();i++)
-			outObj<<"f "<<(*i).v1+plusNum<<' '<<(*i).v2+plusNum<<' '<<(*i).v3+plusNum<<' '<<(*i).v4+plusNum<<'\n';
+			if((*i).getAttri()!=6)
+				outObj<<"f "<<(*i).v1+plusNum<<' '<<(*i).v2+plusNum<<' '<<(*i).v3+plusNum<<' '<<(*i).v4+plusNum<<'\n';
 	}
 
 	outObj<<'\n';
@@ -736,9 +738,9 @@ void REntity::unitSideSubdivide(int face)
 	coordinate p1,p2,uv1,uv2;
 	uv1 = Vertex[ftemp.v1-1];
 	p1 = uv1;
-	p1.y -= uheight/3.4;
+	p1.y -= uheight;
 	p2 = p1;
-	p2.y -= uheight/3.4*1.4;
+	p2.y -= uheight*1.4;
 	uv2 = Vertex[ftemp.v2-1];
 
 	Vertex.push_back(p1);
@@ -837,7 +839,7 @@ void REntity::unitSideSubdivide(int face)
 void REntity::unitTBSubdivide(int face)
 {
 	cubeFace ftb = Face[face];
-	ftb.setAttri();
+	ftb.iniAttri(0);
 	FaceDivided.push_back(ftb);
 }
 
@@ -846,7 +848,7 @@ void REntity::unitTBSubdivide(int face)
 
 void REntity::setWallCorner(int WCSeq,int unitNum)
 {
-	if(_style>50)
+	if(_style > 20)
 	{
 		FaceDivided[WCSeq].iniAttri(15);
 		FaceDivided[WCSeq+1].iniAttri(15);
@@ -864,4 +866,25 @@ void REntity::setWallCorner(int WCSeq,int unitNum)
 		FaceDivided[unitNum-2].iniAttri(16);
 		FaceDivided[unitNum-1].iniAttri(16);
 	}
+}
+
+// set ground band: assign attributes to bands
+
+void REntity::setBand(int BSeq)
+{
+	vector<cubeFace>::iterator i=FaceDivided.begin();
+	short int cornerAttri;
+	for(int x=2;x<FaceDivided.size();x+=3)
+	{
+		cornerAttri = (*(i+x)).getAttri();
+		if(cornerAttri!=15 && cornerAttri!=16 && cornerAttri!=8)                     // avoid overlapping with corner and door
+			(*(i+x)).iniAttri(14);
+	}
+}
+
+// return the number of the vertices in this REntity
+
+int REntity::verticesNum()
+{
+	return Vertex.size();
 }

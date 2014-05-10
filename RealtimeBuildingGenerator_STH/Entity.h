@@ -46,6 +46,7 @@ private:
 	void unitFrontSubdivide(int face,bool setDoor);
 	void unitTBSubdivide(int face);
 	void setWallCorner(int WCSeq,int unitNum);
+	void setBand(int BSeq);
 
 public:
 	REntity(short int entityType,double center_x,double center_y,double center_z,double width,double depth,double height);
@@ -54,6 +55,7 @@ public:
 
 	int Render();
 	void GenObj(unsigned int snumber,int plusNum);
+	int verticesNum();
 	void setValue(short int entityType,double center_x,double center_y,double center_z,double width,double depth,double height,int style);
 	
 	

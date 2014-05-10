@@ -13,7 +13,7 @@ private:
 	// REntities used for maintaining mesh data for: Roof, Body and Ground
 
 	REntity _Roof;
-	REntity _Body;
+	vector<REntity> _Body;
 	REntity _Ground;	
 
 	int _GroundVerticesNum;
