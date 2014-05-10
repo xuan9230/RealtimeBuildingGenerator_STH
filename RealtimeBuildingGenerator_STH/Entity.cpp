@@ -294,7 +294,6 @@ void REntity::GenObj(unsigned int snumber,int plusNum)
 			outObj<<"v "<<(*i).x<<' '<<(*i).y<<' '<<(*i).z<<'\n';
 			// write faces into file
 		for(vector<cubeFace>::iterator i =FaceDivided.begin();i<FaceDivided.end();i++)
-			if((*i).getAttri()!=6 && (*i).getAttri()!=8)
 				outObj<<"f "<<(*i).v1<<' '<<(*i).v2<<' '<<(*i).v3<<' '<<(*i).v4<<'\n';
 	}
 
@@ -306,7 +305,6 @@ void REntity::GenObj(unsigned int snumber,int plusNum)
 			outObj<<"v "<<(*i).x<<' '<<(*i).y<<' '<<(*i).z<<'\n';
 			// write faces into file
 		for(vector<cubeFace>::iterator i =FaceDivided.begin();i<FaceDivided.end();i++)
-			if((*i).getAttri()!=6)
 				outObj<<"f "<<(*i).v1+plusNum<<' '<<(*i).v2+plusNum<<' '<<(*i).v3+plusNum<<' '<<(*i).v4+plusNum<<'\n';
 	}
 
