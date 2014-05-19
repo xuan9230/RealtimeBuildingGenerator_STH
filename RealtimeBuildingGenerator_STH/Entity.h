@@ -13,6 +13,15 @@ struct coordinate
 	double z;
 };
 
+struct simpleFace
+{
+	int v1;
+	int v2;
+	int v3;
+	int v4;
+};
+
+
 class REntity 
 {
 private:
@@ -54,7 +63,7 @@ public:
 	~REntity();
 
 	int Render();
-	void GenObj(unsigned int snumber,int plusNum);
+	void GenObj(unsigned int snumber,int plsuNum);
 	int verticesNum();
 	void setValue(short int entityType,double center_x,double center_y,double center_z,double width,double depth,double height,int style);
 	

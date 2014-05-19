@@ -24,7 +24,7 @@
     <ClCompile Include="Entity.cpp">
       <Filter>头文件</Filter>
     </ClCompile>
-    <ClCompile Include="D:\BaiduYunDownload\CubeFace.cpp">
+    <ClCompile Include="CubeFace.cpp">
       <Filter>头文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -38,7 +38,7 @@
     <ClInclude Include="Geometry.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="D:\BaiduYunDownload\CubeFace.h">
+    <ClInclude Include="CubeFace.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

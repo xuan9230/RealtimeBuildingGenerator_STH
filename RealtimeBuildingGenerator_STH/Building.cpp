@@ -81,7 +81,9 @@ RBuilding::RBuilding (short int RoofType,short int BodyType,short int GroundType
 		double center_x,double center_z,double width,double depth,double height)
 {
 	_snumber++;
-	
+	_GroundVerticesNum = 0;
+	_BodyVerticesNum = 0;
+
 	// generate style value
 	srand((unsigned)time(NULL));
 	int style = rand()%100;

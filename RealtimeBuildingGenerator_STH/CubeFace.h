@@ -17,6 +17,5 @@ public:
 	~cubeFace();
 	void iniAttri(short int iniAtt);
 	void setAttri();
-	void setDoorAttri();                     // change the attribute of one unit to door attribute
 };
 #endif

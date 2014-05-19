@@ -63,13 +63,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Building.cpp" />
-    <ClCompile Include="D:\BaiduYunDownload\CubeFace.cpp" />
+    <ClCompile Include="CubeFace.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Building.h" />
-    <ClInclude Include="D:\BaiduYunDownload\CubeFace.h" />
+    <ClInclude Include="CubeFace.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="Geometry.h" />
   </ItemGroup>

@@ -280,39 +280,221 @@ REntity::~REntity()
 
 void REntity::GenObj(unsigned int snumber,int plusNum)
 {
-	char enName[99];
-	sprintf(enName,"output/Building %d.obj",snumber);
 	
+	 // redistribution of faces that have finishing attributes
+	vector<simpleFace> att0;
+	vector<simpleFace> att6;
+	vector<simpleFace> att7;
+	vector<simpleFace> att8;
+	vector<simpleFace> att11;
+	vector<simpleFace> att14;
+	vector<simpleFace> att15;
+	vector<simpleFace> att16;
+	simpleFace sf;
+
+	for(vector<cubeFace>::iterator i =FaceDivided.begin();i<FaceDivided.end();i++)
+	{
+		sf.v1 = (*i).v1;
+		sf.v2 = (*i).v2;
+		sf.v3 = (*i).v3;
+		sf.v4 = (*i).v4;
+		
+		switch ((*i).getAttri())                    
+		{
+		case 0:
+			att0.push_back(sf);
+			break;
+		case 6:
+			att6.push_back(sf);
+			break;
+		case 7:
+			att7.push_back(sf);
+			break;
+		case 8:
+			att8.push_back(sf);
+			break;
+		case 11:
+			att11.push_back(sf);
+			break;
+		case 14:
+			att14.push_back(sf);
+			break;
+		case 15:
+			att15.push_back(sf);
+			break;
+		case 16:
+			att16.push_back(sf);
+			break;
+		default:
+			break;
+		}
+	}
+
+	// write into .obj files
+	char enName[99];
 	ofstream outObj;
-	outObj.open(enName,ios::out|ios::app);
 
 	if(_entity_type == 1)                 // for uniform cuboid ground
-	{
-		outObj<<"# RBuilding "<<snumber<<"  style value:"<<_style<<"\n\n"<<"# Ground part"<<'\n';
-			// write vertices into file
+	{		
+		sprintf(enName,"output/Building/att0.obj",snumber);
+		outObj.open(enName,ios::out|ios::app);
+
+		outObj<<"# Original RBuilding faces. Attribute: 0"<<'\n';
 		for(vector<coordinate>::iterator i = Vertex.begin();i<Vertex.end();i++)
 			outObj<<"v "<<(*i).x<<' '<<(*i).y<<' '<<(*i).z<<'\n';
-			// write faces into file
-		for(vector<cubeFace>::iterator i =FaceDivided.begin();i<FaceDivided.end();i++)
-				outObj<<"f "<<(*i).v1<<' '<<(*i).v2<<' '<<(*i).v3<<' '<<(*i).v4<<'\n';
-	}
+		for(vector<simpleFace>::iterator i =att0.begin();i<att0.end();i++)
+			outObj<<"f "<<(*i).v1<<' '<<(*i).v2<<' '<<(*i).v3<<' '<<(*i).v4<<'\n';
+		outObj.close();
 
-	else if(_entity_type == 5)            // for cuboid body
-	{
-		outObj<<"# Body part"<<'\n';
-			// write vertices into file
+		sprintf(enName,"output/Building/att6.obj",snumber);
+		outObj.open(enName,ios::out|ios::app);
+
+		outObj<<"# Original RBuilding faces. Attribute: 6"<<'\n';
 		for(vector<coordinate>::iterator i = Vertex.begin();i<Vertex.end();i++)
 			outObj<<"v "<<(*i).x<<' '<<(*i).y<<' '<<(*i).z<<'\n';
-			// write faces into file
-		for(vector<cubeFace>::iterator i =FaceDivided.begin();i<FaceDivided.end();i++)
-				outObj<<"f "<<(*i).v1+plusNum<<' '<<(*i).v2+plusNum<<' '<<(*i).v3+plusNum<<' '<<(*i).v4+plusNum<<'\n';
+		for(vector<simpleFace>::iterator i =att6.begin();i<att6.end();i++)
+			outObj<<"f "<<(*i).v1<<' '<<(*i).v2<<' '<<(*i).v3<<' '<<(*i).v4<<'\n';
+		outObj.close();
+
+		sprintf(enName,"output/Building/att7.obj",snumber);
+		outObj.open(enName,ios::out|ios::app);
+
+		outObj<<"# Original RBuilding faces. Attribute: 7"<<'\n';
+		for(vector<coordinate>::iterator i = Vertex.begin();i<Vertex.end();i++)
+			outObj<<"v "<<(*i).x<<' '<<(*i).y<<' '<<(*i).z<<'\n';
+		for(vector<simpleFace>::iterator i =att7.begin();i<att7.end();i++)
+			outObj<<"f "<<(*i).v1<<' '<<(*i).v2<<' '<<(*i).v3<<' '<<(*i).v4<<'\n';
+		outObj.close();
+
+		sprintf(enName,"output/Building/att8.obj",snumber);
+		outObj.open(enName,ios::out|ios::app);
+
+		outObj<<"# Original RBuilding faces. Attribute: 8"<<'\n';
+		for(vector<coordinate>::iterator i = Vertex.begin();i<Vertex.end();i++)
+			outObj<<"v "<<(*i).x<<' '<<(*i).y<<' '<<(*i).z<<'\n';
+		for(vector<simpleFace>::iterator i =att8.begin();i<att8.end();i++)
+			outObj<<"f "<<(*i).v1<<' '<<(*i).v2<<' '<<(*i).v3<<' '<<(*i).v4<<'\n';
+		outObj.close();
+
+		sprintf(enName,"output/Building/att11.obj",snumber);
+		outObj.open(enName,ios::out|ios::app);
+
+		outObj<<"# Original RBuilding faces. Attribute: 11"<<'\n';
+		for(vector<coordinate>::iterator i = Vertex.begin();i<Vertex.end();i++)
+			outObj<<"v "<<(*i).x<<' '<<(*i).y<<' '<<(*i).z<<'\n';
+		for(vector<simpleFace>::iterator i =att11.begin();i<att11.end();i++)
+			outObj<<"f "<<(*i).v1<<' '<<(*i).v2<<' '<<(*i).v3<<' '<<(*i).v4<<'\n';
+		outObj.close();
+
+		sprintf(enName,"output/Building/att14.obj",snumber);
+		outObj.open(enName,ios::out|ios::app);
+
+		outObj<<"# Original RBuilding faces. Attribute: 14"<<'\n';
+		for(vector<coordinate>::iterator i = Vertex.begin();i<Vertex.end();i++)
+			outObj<<"v "<<(*i).x<<' '<<(*i).y<<' '<<(*i).z<<'\n';
+		for(vector<simpleFace>::iterator i =att14.begin();i<att14.end();i++)
+			outObj<<"f "<<(*i).v1<<' '<<(*i).v2<<' '<<(*i).v3<<' '<<(*i).v4<<'\n';
+		outObj.close();
+
+		sprintf(enName,"output/Building/att15.obj",snumber);
+		outObj.open(enName,ios::out|ios::app);
+
+		outObj<<"# Original RBuilding faces. Attribute: 15"<<'\n';
+		for(vector<coordinate>::iterator i = Vertex.begin();i<Vertex.end();i++)
+			outObj<<"v "<<(*i).x<<' '<<(*i).y<<' '<<(*i).z<<'\n';
+		for(vector<simpleFace>::iterator i =att15.begin();i<att15.end();i++)
+			outObj<<"f "<<(*i).v1<<' '<<(*i).v2<<' '<<(*i).v3<<' '<<(*i).v4<<'\n';
+		outObj.close();
+
+		sprintf(enName,"output/Building/att16.obj",snumber);
+		outObj.open(enName,ios::out|ios::app);
+
+		outObj<<"# Original RBuilding faces. Attribute: 16"<<'\n';
+		for(vector<coordinate>::iterator i = Vertex.begin();i<Vertex.end();i++)
+			outObj<<"v "<<(*i).x<<' '<<(*i).y<<' '<<(*i).z<<'\n';
+		for(vector<simpleFace>::iterator i =att16.begin();i<att16.end();i++)
+			outObj<<"f "<<(*i).v1<<' '<<(*i).v2<<' '<<(*i).v3<<' '<<(*i).v4<<'\n';
+		outObj.close();
 	}
 
-	outObj<<'\n';
+	else if(_entity_type == 5)                 // for cuboid body
+	{
+		sprintf(enName,"output/Building/att0.obj",snumber);
+		outObj.open(enName,ios::out|ios::app);
 
-	outObj.close();
+		for(vector<coordinate>::iterator i = Vertex.begin();i<Vertex.end();i++)
+			outObj<<"v "<<(*i).x<<' '<<(*i).y<<' '<<(*i).z<<'\n';
+		for(vector<simpleFace>::iterator i =att0.begin();i<att0.end();i++)
+			outObj<<"f "<<(*i).v1 +plusNum<<' '<<(*i).v2 +plusNum<<' '<<(*i).v3 +plusNum<<' '<<(*i).v4 +plusNum<<'\n';
+		outObj.close();
+
+		sprintf(enName,"output/Building/att6.obj",snumber);
+		outObj.open(enName,ios::out|ios::app);
+
+		for(vector<coordinate>::iterator i = Vertex.begin();i<Vertex.end();i++)
+			outObj<<"v "<<(*i).x<<' '<<(*i).y<<' '<<(*i).z<<'\n';
+		for(vector<simpleFace>::iterator i =att6.begin();i<att6.end();i++)
+			outObj<<"f "<<(*i).v1 +plusNum<<' '<<(*i).v2 +plusNum<<' '<<(*i).v3 +plusNum<<' '<<(*i).v4 +plusNum<<'\n';
+		outObj.close();
+
+		sprintf(enName,"output/Building/att7.obj",snumber);
+		outObj.open(enName,ios::out|ios::app);
+
+		for(vector<coordinate>::iterator i = Vertex.begin();i<Vertex.end();i++)
+			outObj<<"v "<<(*i).x<<' '<<(*i).y<<' '<<(*i).z<<'\n';
+		for(vector<simpleFace>::iterator i =att7.begin();i<att7.end();i++)
+			outObj<<"f "<<(*i).v1 +plusNum<<' '<<(*i).v2 +plusNum<<' '<<(*i).v3 +plusNum<<' '<<(*i).v4 +plusNum<<'\n';
+		outObj.close();
+
+		sprintf(enName,"output/Building/att8.obj",snumber);
+		outObj.open(enName,ios::out|ios::app);
+
+		for(vector<coordinate>::iterator i = Vertex.begin();i<Vertex.end();i++)
+			outObj<<"v "<<(*i).x<<' '<<(*i).y<<' '<<(*i).z<<'\n';
+		for(vector<simpleFace>::iterator i =att8.begin();i<att8.end();i++)
+			outObj<<"f "<<(*i).v1 +plusNum<<' '<<(*i).v2 +plusNum<<' '<<(*i).v3 +plusNum<<' '<<(*i).v4 +plusNum<<'\n';
+		outObj.close();
+
+		sprintf(enName,"output/Building/att11.obj",snumber);
+		outObj.open(enName,ios::out|ios::app);
+
+		for(vector<coordinate>::iterator i = Vertex.begin();i<Vertex.end();i++)
+			outObj<<"v "<<(*i).x<<' '<<(*i).y<<' '<<(*i).z<<'\n';
+		for(vector<simpleFace>::iterator i =att11.begin();i<att11.end();i++)
+			outObj<<"f "<<(*i).v1 +plusNum<<' '<<(*i).v2 +plusNum<<' '<<(*i).v3 +plusNum<<' '<<(*i).v4 +plusNum<<'\n';
+		outObj.close();
+
+		sprintf(enName,"output/Building/att14.obj",snumber);
+		outObj.open(enName,ios::out|ios::app);
+
+		for(vector<coordinate>::iterator i = Vertex.begin();i<Vertex.end();i++)
+			outObj<<"v "<<(*i).x<<' '<<(*i).y<<' '<<(*i).z<<'\n';
+		for(vector<simpleFace>::iterator i =att14.begin();i<att14.end();i++)
+			outObj<<"f "<<(*i).v1 +plusNum<<' '<<(*i).v2 +plusNum<<' '<<(*i).v3 +plusNum<<' '<<(*i).v4 +plusNum<<'\n';
+		outObj.close();
+
+		sprintf(enName,"output/Building/att15.obj",snumber);
+		outObj.open(enName,ios::out|ios::app);
+
+		for(vector<coordinate>::iterator i = Vertex.begin();i<Vertex.end();i++)
+			outObj<<"v "<<(*i).x<<' '<<(*i).y<<' '<<(*i).z<<'\n';
+		for(vector<simpleFace>::iterator i =att15.begin();i<att15.end();i++)
+			outObj<<"f "<<(*i).v1 +plusNum<<' '<<(*i).v2 +plusNum<<' '<<(*i).v3 +plusNum<<' '<<(*i).v4 +plusNum<<'\n';
+		outObj.close();
+
+		sprintf(enName,"output/Building/att16.obj",snumber);
+		outObj.open(enName,ios::out|ios::app);
+
+		for(vector<coordinate>::iterator i = Vertex.begin();i<Vertex.end();i++)
+			outObj<<"v "<<(*i).x<<' '<<(*i).y<<' '<<(*i).z<<'\n';
+		for(vector<simpleFace>::iterator i =att16.begin();i<att16.end();i++)
+			outObj<<"f "<<(*i).v1 +plusNum<<' '<<(*i).v2 +plusNum<<' '<<(*i).v3 +plusNum<<' '<<(*i).v4 +plusNum<<'\n';
+		outObj.close();
+	}	
+
 
 }
+
 
 // private member values set by "building"
 
@@ -663,19 +845,19 @@ void REntity::unitFrontSubdivide(int face, bool setDoor)
 	newf.v2 = startPos;
 	newf.v3 = startPos+3;
 	newf.v4 = startPos+2;
-	newf.iniAttri(0);
+	newf.iniAttri(11);
 	FaceDivided.push_back(newf);
 	newf.v1 = startPos;
 	newf.v2 = startPos+1;
 	newf.v3 = startPos+4;
 	newf.v4 = startPos+3;
-	newf.iniAttri(0);
+	newf.iniAttri(11);
 	FaceDivided.push_back(newf);
 	newf.v1 = startPos+1;
 	newf.v2 = ftemp.v2;
 	newf.v3 = startPos+5;
 	newf.v4 = startPos+4;
-	newf.iniAttri(0);
+	newf.iniAttri(11);
 	FaceDivided.push_back(newf);
 
 	newf.v1 = startPos+2;
@@ -698,7 +880,7 @@ void REntity::unitFrontSubdivide(int face, bool setDoor)
 	newf.v3 = startPos+9;
 	newf.v4 = startPos+8;
 	if(setDoor==false)
-		newf.iniAttri(0);
+		newf.iniAttri(11);
 	else
 		newf.iniAttri(8);
 	FaceDivided.push_back(newf);
@@ -707,19 +889,19 @@ void REntity::unitFrontSubdivide(int face, bool setDoor)
 	newf.v2 = startPos+7;
 	newf.v3 = startPos+11;
 	newf.v4 = startPos+10;
-	newf.iniAttri(0);
+	newf.iniAttri(11);
 	FaceDivided.push_back(newf);
 	newf.v1 = startPos+7;
 	newf.v2 = startPos+8;
 	newf.v3 = startPos+12;
 	newf.v4 = startPos+11;
-	newf.iniAttri(0);
+	newf.iniAttri(11);
 	FaceDivided.push_back(newf);
 	newf.v1 = startPos+8;
 	newf.v2 = startPos+9;
 	newf.v3 = startPos+13;
 	newf.v4 = startPos+12;
-	newf.iniAttri(0);
+	newf.iniAttri(11);
 	FaceDivided.push_back(newf);
 
 }
@@ -779,19 +961,19 @@ void REntity::unitSideSubdivide(int face)
 	newf.v2 = startPos;
 	newf.v3 = startPos+3;
 	newf.v4 = startPos+2;
-	newf.iniAttri(0);
+	newf.iniAttri(11);
 	FaceDivided.push_back(newf);
 	newf.v1 = startPos;
 	newf.v2 = startPos+1;
 	newf.v3 = startPos+4;
 	newf.v4 = startPos+3;
-	newf.iniAttri(0);
+	newf.iniAttri(11);
 	FaceDivided.push_back(newf);
 	newf.v1 = startPos+1;
 	newf.v2 = ftemp.v2;
 	newf.v3 = startPos+5;
 	newf.v4 = startPos+4;
-	newf.iniAttri(0);
+	newf.iniAttri(11);
 	FaceDivided.push_back(newf);
 
 	newf.v1 = startPos+2;
@@ -810,26 +992,26 @@ void REntity::unitSideSubdivide(int face)
 	newf.v2 = startPos+5;
 	newf.v3 = startPos+9;
 	newf.v4 = startPos+8;
-	newf.iniAttri(0);
+	newf.iniAttri(11);
 	FaceDivided.push_back(newf);
 
 	newf.v1 = startPos+6;
 	newf.v2 = startPos+7;
 	newf.v3 = startPos+11;
 	newf.v4 = startPos+10;
-	newf.iniAttri(0);
+	newf.iniAttri(11);
 	FaceDivided.push_back(newf);
 	newf.v1 = startPos+7;
 	newf.v2 = startPos+8;
 	newf.v3 = startPos+12;
 	newf.v4 = startPos+11;
-	newf.iniAttri(0);
+	newf.iniAttri(11);
 	FaceDivided.push_back(newf);
 	newf.v1 = startPos+8;
 	newf.v2 = startPos+9;
 	newf.v3 = startPos+13;
 	newf.v4 = startPos+12;
-	newf.iniAttri(0);
+	newf.iniAttri(11);
 	FaceDivided.push_back(newf);
 
 }

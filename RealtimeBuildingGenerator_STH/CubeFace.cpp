@@ -11,6 +11,9 @@ cubeFace::cubeFace(short int originAtt)
 	case 1:
 		break;
 	case 2:
+	case 3:
+	case 22:
+	case 23:
 		_attri = 5;
 		break;
 	default:
@@ -30,7 +33,6 @@ short int cubeFace::getAttri()
 
 void cubeFace::iniAttri(short int iniAtt)
 {
-	if(iniAtt!=0)                               // initiate _attri
 		_attri = iniAtt;
 }
 
@@ -45,14 +47,5 @@ void cubeFace::setAttri()
 		break;
 	default:
 		break;
-	}
-}
-
-void cubeFace::setDoorAttri()
-{
-	if(_attri!=8) _attri = 8;
-	else
-	{
-
 	}
 }
