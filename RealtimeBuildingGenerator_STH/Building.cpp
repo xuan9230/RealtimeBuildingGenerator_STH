@@ -116,11 +116,11 @@ RBuilding::~RBuilding()
 
 void RBuilding::bGenObj()
 {
-	_Ground.GenObj(_snumber,0);
+	_Ground.GenObj(_snumber,0,1);
 	int BVN=0;
 	for(vector<REntity>::iterator i=_Body.begin();i!=_Body.end();i++)
 	{
-		(*i).GenObj(_snumber,_GroundVerticesNum+BVN);
+		(*i).GenObj(_snumber,_GroundVerticesNum+BVN,_Body.size());
 		BVN += (*i).verticesNum();
 	}
 }

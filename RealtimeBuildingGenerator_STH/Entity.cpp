@@ -7,6 +7,12 @@
 // Render the geometry - calculate coordinates and faces
 // return the number of the vertices
 
+static int att6FaceCount = 1;
+static int att7FaceCount = 1;
+static int att9FaceCount = 1;
+static int att10FaceCount = 1;
+static int att15FaceCount = 1;
+
 int REntity::Render()
 {
 	switch (_entity_type)
@@ -278,7 +284,7 @@ REntity::~REntity()
 
 // File operate, write the values into obj file
 
-void REntity::GenObj(unsigned int snumber,int plusNum)
+void REntity::GenObj(unsigned int snumber,int plusNum,int floors)
 {
 	
 	 // redistribution of faces that have finishing attributes
@@ -286,6 +292,8 @@ void REntity::GenObj(unsigned int snumber,int plusNum)
 	vector<simpleFace> att6;
 	vector<simpleFace> att7;
 	vector<simpleFace> att8;
+	vector<simpleFace> att9;
+	vector<simpleFace> att10;
 	vector<simpleFace> att11;
 	vector<simpleFace> att14;
 	vector<simpleFace> att15;
@@ -313,6 +321,12 @@ void REntity::GenObj(unsigned int snumber,int plusNum)
 		case 8:
 			att8.push_back(sf);
 			break;
+		case 9:
+			att9.push_back(sf);
+			break;
+		case 10:
+			att10.push_back(sf);
+			break;
 		case 11:
 			att11.push_back(sf);
 			break;
@@ -336,80 +350,118 @@ void REntity::GenObj(unsigned int snumber,int plusNum)
 
 	if(_entity_type == 1)                 // for uniform cuboid ground
 	{		
-		sprintf(enName,"output/Building/att0.obj",snumber);
+		sprintf(enName,"F:\\testData\\att0.obj");
 		outObj.open(enName,ios::out|ios::app);
 
-		outObj<<"# Original RBuilding faces. Attribute: 0"<<'\n';
+		outObj<<"0\n"<<_style<<'\n'<<"# Original RBuilding faces.\n";
 		for(vector<coordinate>::iterator i = Vertex.begin();i<Vertex.end();i++)
 			outObj<<"v "<<(*i).x<<' '<<(*i).y<<' '<<(*i).z<<'\n';
 		for(vector<simpleFace>::iterator i =att0.begin();i<att0.end();i++)
 			outObj<<"f "<<(*i).v1<<' '<<(*i).v2<<' '<<(*i).v3<<' '<<(*i).v4<<'\n';
-		outObj.close();
+		outObj.close();		
 
-		sprintf(enName,"output/Building/att6.obj",snumber);
+		sprintf(enName,"F:\\testData\\att8.obj");
 		outObj.open(enName,ios::out|ios::app);
 
-		outObj<<"# Original RBuilding faces. Attribute: 6"<<'\n';
-		for(vector<coordinate>::iterator i = Vertex.begin();i<Vertex.end();i++)
-			outObj<<"v "<<(*i).x<<' '<<(*i).y<<' '<<(*i).z<<'\n';
-		for(vector<simpleFace>::iterator i =att6.begin();i<att6.end();i++)
-			outObj<<"f "<<(*i).v1<<' '<<(*i).v2<<' '<<(*i).v3<<' '<<(*i).v4<<'\n';
-		outObj.close();
-
-		sprintf(enName,"output/Building/att7.obj",snumber);
-		outObj.open(enName,ios::out|ios::app);
-
-		outObj<<"# Original RBuilding faces. Attribute: 7"<<'\n';
-		for(vector<coordinate>::iterator i = Vertex.begin();i<Vertex.end();i++)
-			outObj<<"v "<<(*i).x<<' '<<(*i).y<<' '<<(*i).z<<'\n';
-		for(vector<simpleFace>::iterator i =att7.begin();i<att7.end();i++)
-			outObj<<"f "<<(*i).v1<<' '<<(*i).v2<<' '<<(*i).v3<<' '<<(*i).v4<<'\n';
-		outObj.close();
-
-		sprintf(enName,"output/Building/att8.obj",snumber);
-		outObj.open(enName,ios::out|ios::app);
-
-		outObj<<"# Original RBuilding faces. Attribute: 8"<<'\n';
+		outObj<<"8\n"<<_style<<'\n'<<"# Original RBuilding faces.\n";
 		for(vector<coordinate>::iterator i = Vertex.begin();i<Vertex.end();i++)
 			outObj<<"v "<<(*i).x<<' '<<(*i).y<<' '<<(*i).z<<'\n';
 		for(vector<simpleFace>::iterator i =att8.begin();i<att8.end();i++)
 			outObj<<"f "<<(*i).v1<<' '<<(*i).v2<<' '<<(*i).v3<<' '<<(*i).v4<<'\n';
 		outObj.close();
 
-		sprintf(enName,"output/Building/att11.obj",snumber);
+		// for faces that have attribute 9 or 10: generate every face separately, for texture mapping
+
+		for(vector<simpleFace>::iterator i =att9.begin();i<att9.end();i++,att9FaceCount++)
+		{
+			sprintf(enName,"F:\\testData\\att9_%d.obj",att9FaceCount);
+			outObj.open(enName,ios::out|ios::app);
+
+			outObj<<"9\n"<<_style<<'\n';
+			if(att9FaceCount == 1)
+				outObj<<att9.size()<<'\n';
+			outObj<<'\n'<<"# Original RBuilding faces.\n";
+			coordinate vUse = Vertex[(*i).v1-1];
+			outObj<<"v "<<vUse.x<<' '<<vUse.y<<' '<<vUse.z<<'\n';
+			vUse = Vertex[(*i).v2-1];
+			outObj<<"v "<<vUse.x<<' '<<vUse.y<<' '<<vUse.z<<'\n';
+			vUse = Vertex[(*i).v3-1];
+			outObj<<"v "<<vUse.x<<' '<<vUse.y<<' '<<vUse.z<<'\n';
+			vUse = Vertex[(*i).v4-1];
+			outObj<<"v "<<vUse.x<<' '<<vUse.y<<' '<<vUse.z<<'\n';
+
+			outObj<<"f 1 2 3 4\n";
+			outObj.close();
+		}
+
+		for(vector<simpleFace>::iterator i =att10.begin();i<att10.end();i++,att10FaceCount++)
+		{
+			sprintf(enName,"F:\\testData\\att10_%d.obj",att10FaceCount);
+			outObj.open(enName,ios::out|ios::app);
+
+			outObj<<"10\n"<<_style<<'\n';
+			if(att10FaceCount == 1)
+				outObj<<att10.size()<<'\n';
+			outObj<<'\n'<<"# Original RBuilding faces.\n";
+			coordinate vUse = Vertex[(*i).v1-1];
+			outObj<<"v "<<vUse.x<<' '<<vUse.y<<' '<<vUse.z<<'\n';
+			vUse = Vertex[(*i).v2-1];
+			outObj<<"v "<<vUse.x<<' '<<vUse.y<<' '<<vUse.z<<'\n';
+			vUse = Vertex[(*i).v3-1];
+			outObj<<"v "<<vUse.x<<' '<<vUse.y<<' '<<vUse.z<<'\n';
+			vUse = Vertex[(*i).v4-1];
+			outObj<<"v "<<vUse.x<<' '<<vUse.y<<' '<<vUse.z<<'\n';
+
+			outObj<<"f 1 2 3 4\n";
+			outObj.close();
+		}
+
+		sprintf(enName,"F:\\testData\\att11.obj");
 		outObj.open(enName,ios::out|ios::app);
 
-		outObj<<"# Original RBuilding faces. Attribute: 11"<<'\n';
+		outObj<<"11\n"<<_style<<'\n'<<"# Original RBuilding faces.\n";
 		for(vector<coordinate>::iterator i = Vertex.begin();i<Vertex.end();i++)
 			outObj<<"v "<<(*i).x<<' '<<(*i).y<<' '<<(*i).z<<'\n';
 		for(vector<simpleFace>::iterator i =att11.begin();i<att11.end();i++)
 			outObj<<"f "<<(*i).v1<<' '<<(*i).v2<<' '<<(*i).v3<<' '<<(*i).v4<<'\n';
 		outObj.close();
 
-		sprintf(enName,"output/Building/att14.obj",snumber);
+		sprintf(enName,"F:\\testData\\att14.obj");
 		outObj.open(enName,ios::out|ios::app);
 
-		outObj<<"# Original RBuilding faces. Attribute: 14"<<'\n';
+		outObj<<"14\n"<<_style<<'\n'<<"# Original RBuilding faces.\n";
 		for(vector<coordinate>::iterator i = Vertex.begin();i<Vertex.end();i++)
 			outObj<<"v "<<(*i).x<<' '<<(*i).y<<' '<<(*i).z<<'\n';
 		for(vector<simpleFace>::iterator i =att14.begin();i<att14.end();i++)
 			outObj<<"f "<<(*i).v1<<' '<<(*i).v2<<' '<<(*i).v3<<' '<<(*i).v4<<'\n';
 		outObj.close();
 
-		sprintf(enName,"output/Building/att15.obj",snumber);
+		for(vector<simpleFace>::iterator i =att15.begin();i<att15.end();i++,att15FaceCount++)
+		{
+			sprintf(enName,"F:\\testData\\att15_%d.obj",att15FaceCount);
+			outObj.open(enName,ios::out|ios::app);
+
+			outObj<<"15\n"<<_style<<'\n';
+			if(att15FaceCount == 1)
+				outObj<<att15.size()<<'\n';
+			outObj<<'\n'<<"# Original RBuilding faces.\n";
+			coordinate vUse = Vertex[(*i).v1-1];
+			outObj<<"v "<<vUse.x<<' '<<vUse.y<<' '<<vUse.z<<'\n';
+			vUse = Vertex[(*i).v2-1];
+			outObj<<"v "<<vUse.x<<' '<<vUse.y<<' '<<vUse.z<<'\n';
+			vUse = Vertex[(*i).v3-1];
+			outObj<<"v "<<vUse.x<<' '<<vUse.y<<' '<<vUse.z<<'\n';
+			vUse = Vertex[(*i).v4-1];
+			outObj<<"v "<<vUse.x<<' '<<vUse.y<<' '<<vUse.z<<'\n';
+
+			outObj<<"f 1 2 3 4\n";
+			outObj.close();
+		}
+
+		sprintf(enName,"F:\\testData\\att16.obj");
 		outObj.open(enName,ios::out|ios::app);
 
-		outObj<<"# Original RBuilding faces. Attribute: 15"<<'\n';
-		for(vector<coordinate>::iterator i = Vertex.begin();i<Vertex.end();i++)
-			outObj<<"v "<<(*i).x<<' '<<(*i).y<<' '<<(*i).z<<'\n';
-		for(vector<simpleFace>::iterator i =att15.begin();i<att15.end();i++)
-			outObj<<"f "<<(*i).v1<<' '<<(*i).v2<<' '<<(*i).v3<<' '<<(*i).v4<<'\n';
-		outObj.close();
-
-		sprintf(enName,"output/Building/att16.obj",snumber);
-		outObj.open(enName,ios::out|ios::app);
-
-		outObj<<"# Original RBuilding faces. Attribute: 16"<<'\n';
+		outObj<<"16\n"<<_style<<'\n'<<"# Original RBuilding faces.\n";
 		for(vector<coordinate>::iterator i = Vertex.begin();i<Vertex.end();i++)
 			outObj<<"v "<<(*i).x<<' '<<(*i).y<<' '<<(*i).z<<'\n';
 		for(vector<simpleFace>::iterator i =att16.begin();i<att16.end();i++)
@@ -419,7 +471,7 @@ void REntity::GenObj(unsigned int snumber,int plusNum)
 
 	else if(_entity_type == 5)                 // for cuboid body
 	{
-		sprintf(enName,"output/Building/att0.obj",snumber);
+		sprintf(enName,"F:\\testData\\att0.obj");
 		outObj.open(enName,ios::out|ios::app);
 
 		for(vector<coordinate>::iterator i = Vertex.begin();i<Vertex.end();i++)
@@ -428,34 +480,53 @@ void REntity::GenObj(unsigned int snumber,int plusNum)
 			outObj<<"f "<<(*i).v1 +plusNum<<' '<<(*i).v2 +plusNum<<' '<<(*i).v3 +plusNum<<' '<<(*i).v4 +plusNum<<'\n';
 		outObj.close();
 
-		sprintf(enName,"output/Building/att6.obj",snumber);
-		outObj.open(enName,ios::out|ios::app);
+		// for faces that have attribute 6 or 7 or 15: generate every face separately, for texture mapping
 
-		for(vector<coordinate>::iterator i = Vertex.begin();i<Vertex.end();i++)
-			outObj<<"v "<<(*i).x<<' '<<(*i).y<<' '<<(*i).z<<'\n';
-		for(vector<simpleFace>::iterator i =att6.begin();i<att6.end();i++)
-			outObj<<"f "<<(*i).v1 +plusNum<<' '<<(*i).v2 +plusNum<<' '<<(*i).v3 +plusNum<<' '<<(*i).v4 +plusNum<<'\n';
-		outObj.close();
+		for(vector<simpleFace>::iterator i =att6.begin();i<att6.end();i++,att6FaceCount++)
+		{
+			sprintf(enName,"F:\\testData\\att6_%d.obj",att6FaceCount);
+			outObj.open(enName,ios::out|ios::app);
 
-		sprintf(enName,"output/Building/att7.obj",snumber);
-		outObj.open(enName,ios::out|ios::app);
+			outObj<<"6\n"<<_style<<'\n';
+			if(att6FaceCount == 1)
+				outObj<<att6.size()*floors<<'\n';
+			outObj<<"# Original RBuilding faces.\n";
+			coordinate vUse = Vertex[(*i).v1-1];
+			outObj<<"v "<<vUse.x<<' '<<vUse.y<<' '<<vUse.z<<'\n';
+			vUse = Vertex[(*i).v2-1];
+			outObj<<"v "<<vUse.x<<' '<<vUse.y<<' '<<vUse.z<<'\n';
+			vUse = Vertex[(*i).v3-1];
+			outObj<<"v "<<vUse.x<<' '<<vUse.y<<' '<<vUse.z<<'\n';
+			vUse = Vertex[(*i).v4-1];
+			outObj<<"v "<<vUse.x<<' '<<vUse.y<<' '<<vUse.z<<'\n';
 
-		for(vector<coordinate>::iterator i = Vertex.begin();i<Vertex.end();i++)
-			outObj<<"v "<<(*i).x<<' '<<(*i).y<<' '<<(*i).z<<'\n';
-		for(vector<simpleFace>::iterator i =att7.begin();i<att7.end();i++)
-			outObj<<"f "<<(*i).v1 +plusNum<<' '<<(*i).v2 +plusNum<<' '<<(*i).v3 +plusNum<<' '<<(*i).v4 +plusNum<<'\n';
-		outObj.close();
+			outObj<<"f 1 2 3 4\n";
+			outObj.close();
+		}
 
-		sprintf(enName,"output/Building/att8.obj",snumber);
-		outObj.open(enName,ios::out|ios::app);
+		for(vector<simpleFace>::iterator i =att7.begin();i<att7.end();i++,att7FaceCount++)
+		{
+			sprintf(enName,"F:\\testData\\att7_%d.obj",att7FaceCount);
+			outObj.open(enName,ios::out|ios::app);
 
-		for(vector<coordinate>::iterator i = Vertex.begin();i<Vertex.end();i++)
-			outObj<<"v "<<(*i).x<<' '<<(*i).y<<' '<<(*i).z<<'\n';
-		for(vector<simpleFace>::iterator i =att8.begin();i<att8.end();i++)
-			outObj<<"f "<<(*i).v1 +plusNum<<' '<<(*i).v2 +plusNum<<' '<<(*i).v3 +plusNum<<' '<<(*i).v4 +plusNum<<'\n';
-		outObj.close();
+			outObj<<"7\n"<<_style<<'\n';
+			if(att7FaceCount == 1)
+				outObj<<att7.size()*floors<<'\n';
+			outObj<<'\n'<<"# Original RBuilding faces.\n";
+			coordinate vUse = Vertex[(*i).v1-1];
+			outObj<<"v "<<vUse.x<<' '<<vUse.y<<' '<<vUse.z<<'\n';
+			vUse = Vertex[(*i).v2-1];
+			outObj<<"v "<<vUse.x<<' '<<vUse.y<<' '<<vUse.z<<'\n';
+			vUse = Vertex[(*i).v3-1];
+			outObj<<"v "<<vUse.x<<' '<<vUse.y<<' '<<vUse.z<<'\n';
+			vUse = Vertex[(*i).v4-1];
+			outObj<<"v "<<vUse.x<<' '<<vUse.y<<' '<<vUse.z<<'\n';
 
-		sprintf(enName,"output/Building/att11.obj",snumber);
+			outObj<<"f 1 2 3 4\n";
+			outObj.close();
+		}
+
+		sprintf(enName,"F:\\testData\\att11.obj");
 		outObj.open(enName,ios::out|ios::app);
 
 		for(vector<coordinate>::iterator i = Vertex.begin();i<Vertex.end();i++)
@@ -464,32 +535,6 @@ void REntity::GenObj(unsigned int snumber,int plusNum)
 			outObj<<"f "<<(*i).v1 +plusNum<<' '<<(*i).v2 +plusNum<<' '<<(*i).v3 +plusNum<<' '<<(*i).v4 +plusNum<<'\n';
 		outObj.close();
 
-		sprintf(enName,"output/Building/att14.obj",snumber);
-		outObj.open(enName,ios::out|ios::app);
-
-		for(vector<coordinate>::iterator i = Vertex.begin();i<Vertex.end();i++)
-			outObj<<"v "<<(*i).x<<' '<<(*i).y<<' '<<(*i).z<<'\n';
-		for(vector<simpleFace>::iterator i =att14.begin();i<att14.end();i++)
-			outObj<<"f "<<(*i).v1 +plusNum<<' '<<(*i).v2 +plusNum<<' '<<(*i).v3 +plusNum<<' '<<(*i).v4 +plusNum<<'\n';
-		outObj.close();
-
-		sprintf(enName,"output/Building/att15.obj",snumber);
-		outObj.open(enName,ios::out|ios::app);
-
-		for(vector<coordinate>::iterator i = Vertex.begin();i<Vertex.end();i++)
-			outObj<<"v "<<(*i).x<<' '<<(*i).y<<' '<<(*i).z<<'\n';
-		for(vector<simpleFace>::iterator i =att15.begin();i<att15.end();i++)
-			outObj<<"f "<<(*i).v1 +plusNum<<' '<<(*i).v2 +plusNum<<' '<<(*i).v3 +plusNum<<' '<<(*i).v4 +plusNum<<'\n';
-		outObj.close();
-
-		sprintf(enName,"output/Building/att16.obj",snumber);
-		outObj.open(enName,ios::out|ios::app);
-
-		for(vector<coordinate>::iterator i = Vertex.begin();i<Vertex.end();i++)
-			outObj<<"v "<<(*i).x<<' '<<(*i).y<<' '<<(*i).z<<'\n';
-		for(vector<simpleFace>::iterator i =att16.begin();i<att16.end();i++)
-			outObj<<"f "<<(*i).v1 +plusNum<<' '<<(*i).v2 +plusNum<<' '<<(*i).v3 +plusNum<<' '<<(*i).v4 +plusNum<<'\n';
-		outObj.close();
 	}	
 
 
@@ -864,14 +909,22 @@ void REntity::unitFrontSubdivide(int face, bool setDoor)
 	newf.v2 = startPos+3;
 	newf.v3 = startPos+7;
 	newf.v4 = startPos+6;
-	newf.iniAttri(7);
+	if(_entity_type == 1)
+		newf.iniAttri(10);
+	else
+		newf.iniAttri(7);
 	FaceDivided.push_back(newf);
 	newf.v1 = startPos+3;
 	newf.v2 = startPos+4;
 	newf.v3 = startPos+8;
 	newf.v4 = startPos+7;
 	if(setDoor==false)
-		newf.iniAttri(6);
+	{
+		if(_entity_type == 1)
+			newf.iniAttri(9);
+		else
+			newf.iniAttri(6);
+	}
 	else
 		newf.iniAttri(8);
 	FaceDivided.push_back(newf);
@@ -980,13 +1033,19 @@ void REntity::unitSideSubdivide(int face)
 	newf.v2 = startPos+3;
 	newf.v3 = startPos+7;
 	newf.v4 = startPos+6;
-	newf.iniAttri(7);
+	if(_entity_type == 1)
+		newf.iniAttri(10);
+	else
+		newf.iniAttri(7);
 	FaceDivided.push_back(newf);
 	newf.v1 = startPos+3;
 	newf.v2 = startPos+4;
 	newf.v3 = startPos+8;
 	newf.v4 = startPos+7;
-	newf.iniAttri(6);
+	if(_entity_type == 1)
+		newf.iniAttri(9);
+	else
+		newf.iniAttri(6);
 	FaceDivided.push_back(newf);
 	newf.v1 = startPos+4;
 	newf.v2 = startPos+5;
@@ -1028,7 +1087,7 @@ void REntity::unitTBSubdivide(int face)
 
 void REntity::setWallCorner(int WCSeq,int unitNum)
 {
-	if(_style > 20)
+	if(_style > 80)
 	{
 		FaceDivided[WCSeq].iniAttri(15);
 		FaceDivided[WCSeq+1].iniAttri(15);
